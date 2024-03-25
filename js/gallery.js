@@ -89,43 +89,47 @@ function addImages(array) {
   gallery.style.flexWrap = 'wrap';
   gallery.style.gap = '24px';
   gallery.style.maxWidth = '1128px';
-  gallery.style.padding = 'auto';
+  gallery.style.width = '100%';
+  gallery.style.margin = 'auto';
 }
 
 addImages(images);
 
-const itemGallery = document.querySelector('.gallery-item');
-// const linkGallery = document.querySelector('.gallery-link');
+const itemGalleryAll = document.querySelectorAll('.gallery-item');
 const allImagesGalery = document.querySelectorAll('.gallery-image');
 
-gallery.addEventListener('click', onClickGallery);
+gallery.addEventListener('click', onClickImage);
 
-function onClickGallery(event) {
-  console.dir(event.target);
+function onClickImage(event) {
   event.preventDefault();
-  if (event.target.nodeName === 'IMG') {
-    // console.log(event.target.dataset.source);
 
-    const instance = basicLightbox.create(
-      `<div class="modal">
+  if (event.target.nodeName !== 'IMG') {
+    return;
+  }
+
+  const instance = basicLightbox.create(
+    `<div class="modal">
             <img
           class="opened-image"
           src="${event.target.dataset.source}"/>
     </div>`,
 
-      {
-        closable: true,
-        onShow: instance => {
-          instance.element().querySelector('.modal').onclick = instance.close;
-        },
-      }
-    );
-    console.log(instance.element());
-    instance.show();
-  }
+    {
+      closable: false,
+      onShow: instance => {
+        instance.element().querySelector('.modal').onclick = instance.close;
+      },
+    }
+  );
+
+  instance.show();
 }
 
 allImagesGalery.forEach(image => {
-  image.style.width = '360px';
+  image.style.width = '100%';
   image.style.height = '200px';
+});
+
+itemGalleryAll.forEach(item => {
+  item.style.width = 'calc((100% - 24px* 2) / 3)';
 });
